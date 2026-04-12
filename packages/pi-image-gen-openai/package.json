@@ -1,0 +1,26 @@
+{
+  "name": "pi-image-gen-openai",
+  "version": "0.1.0",
+  "description": "Pi image generation tool powered by OpenAI (GPT Image, DALL-E)",
+  "keywords": [
+    "pi-package"
+  ],
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@sinclair/typebox": "*",
+    "@mariozechner/pi-tui": "*"
+  },
+  "pi": {
+    "extensions": [
+      ".pi/extensions/image-gen-openai"
+    ]
+  },
+  "author": "michaelliv",
+  "license": "MIT",
+  "dependencies": {
+    "pi-image-gen-core": "workspace:*"
+  },
+  "bundledDependencies": [
+    "pi-image-gen-core"
+  ]
+}
