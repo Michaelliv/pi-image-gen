@@ -28,19 +28,23 @@ export const replicate: ImageProvider = {
       num_outputs: options.n ?? 1,
     };
 
-    // Create prediction
-    const createRes = await fetch("https://api.replicate.com/v1/predictions", {
+    // Use the official models endpoint: POST /v1/models/{owner}/{name}/predictions
+    const createRes = await fetch(`https://api.replicate.com/v1/models/${model}/predictions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({ model, input }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        Prefer: "wait",
+      },
+      body: JSON.stringify({ input }),
     });
 
     if (!createRes.ok) throw new Error(`Replicate API error (${createRes.status}): ${await createRes.text()}`);
 
     let prediction = await createRes.json();
 
-    // Poll for completion
-    while (prediction.status !== "succeeded" && prediction.status !== "failed") {
+    // Poll for completion if not already done (Prefer: wait may have handled it)
+    while (prediction.status !== "succeeded" && prediction.status !== "failed" && prediction.status !== "canceled") {
       await new Promise((r) => setTimeout(r, 2000));
       const pollRes = await fetch(prediction.urls.get, {
         headers: { Authorization: `Bearer ${apiKey}` },
