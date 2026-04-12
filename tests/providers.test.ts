@@ -28,7 +28,6 @@ const fakeKeys: Record<string, string> = {
   GOOGLE_API_KEY: "fake",
   XAI_API_KEY: "fake",
   RECRAFT_API_KEY: "fake",
-  FAL_KEY: "fake",
   REPLICATE_API_TOKEN: "fake",
   TOGETHER_API_KEY: "fake",
 };

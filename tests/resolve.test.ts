@@ -24,12 +24,12 @@ describe("resolveProvider", () => {
   });
 
   test("picks provider by env key", () => {
-    process.env.FAL_KEY = "fake";
-    expect(resolveProvider()?.name).toBe("fal");
+    process.env.REPLICATE_API_TOKEN = "fake";
+    expect(resolveProvider()?.name).toBe("replicate");
   });
 
   test("respects priority order", () => {
-    process.env.FAL_KEY = "fake";
+    process.env.REPLICATE_API_TOKEN = "fake";
     process.env.OPENAI_API_KEY = "fake";
     expect(resolveProvider()?.name).toBe("openai");
   });
@@ -37,21 +37,21 @@ describe("resolveProvider", () => {
   test("openai is highest priority", () => {
     process.env.OPENAI_API_KEY = "fake";
     process.env.GOOGLE_API_KEY = "fake";
-    process.env.FAL_KEY = "fake";
+    process.env.REPLICATE_API_TOKEN = "fake";
     expect(resolveProvider()?.name).toBe("openai");
   });
 
   test("custom provider list", () => {
     process.env.OPENAI_API_KEY = "fake";
-    process.env.FAL_KEY = "fake";
-    const falOnly = allProviders.filter((p) => p.name === "fal");
-    expect(resolveProvider(falOnly)?.name).toBe("fal");
+    process.env.TOGETHER_API_KEY = "fake";
+    const togetherOnly = allProviders.filter((p) => p.name === "together");
+    expect(resolveProvider(togetherOnly)?.name).toBe("together");
   });
 
-  test("all 7 providers are registered", () => {
-    expect(allProviders).toHaveLength(7);
+  test("all 6 providers are registered", () => {
+    expect(allProviders).toHaveLength(6);
     const names = allProviders.map((p) => p.name);
-    for (const expected of ["openai", "google", "xai", "recraft", "fal", "replicate", "together"]) {
+    for (const expected of ["openai", "google", "xai", "recraft", "replicate", "together"]) {
       expect(names).toContain(expected);
     }
   });
