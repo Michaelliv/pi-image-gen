@@ -12,18 +12,6 @@
       "name": "pi-image-gen-core",
       "version": "0.1.0",
     },
-    "packages/pi-image-gen-fal": {
-      "name": "pi-image-gen-fal",
-      "version": "0.1.0",
-      "dependencies": {
-        "pi-image-gen-core": "workspace:*",
-      },
-      "peerDependencies": {
-        "@mariozechner/pi-coding-agent": "*",
-        "@mariozechner/pi-tui": "*",
-        "@sinclair/typebox": "*",
-      },
-    },
     "packages/pi-image-gen-google": {
       "name": "pi-image-gen-google",
       "version": "0.1.0",
@@ -545,8 +533,6 @@
     "pend": ["pend@1.2.0", "", {}, "sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg=="],
 
     "pi-image-gen-core": ["pi-image-gen-core@workspace:packages/core"],
-
-    "pi-image-gen-fal": ["pi-image-gen-fal@workspace:packages/pi-image-gen-fal"],
 
     "pi-image-gen-google": ["pi-image-gen-google@workspace:packages/pi-image-gen-google"],
 
