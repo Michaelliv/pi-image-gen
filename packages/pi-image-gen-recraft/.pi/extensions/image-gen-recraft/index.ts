@@ -53,7 +53,7 @@ export default function (pi: ExtensionAPI) {
         size: params.size,
         style: params.style,
         model: params.model,
-        n: Math.min(params.n ?? 1, 4),
+        n: Math.min(params.n ?? 1, 6),
       });
 
       return {

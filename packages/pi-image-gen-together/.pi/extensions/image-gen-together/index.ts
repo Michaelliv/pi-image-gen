@@ -8,11 +8,15 @@ const schema = Type.Object({
   model: Type.Optional(
     Type.String({
       description:
-        "Together AI model (default: black-forest-labs/FLUX.1-dev). Examples: ideogram/ideogram-3.0, Qwen/Qwen-Image",
+        "Together AI model (default: black-forest-labs/FLUX.1-schnell). Examples: black-forest-labs/FLUX.1-dev, ideogram/ideogram-3.0, Qwen/Qwen-Image",
     }),
   ),
   size: Type.Optional(Type.String({ description: "Image dimensions as WxH (default: 1024x1024)" })),
-  steps: Type.Optional(Type.Number({ description: "Number of inference steps (default: 28)" })),
+  steps: Type.Optional(
+    Type.Number({
+      description: "Number of inference steps (default: 4). Use 20-30 for FLUX.1-dev or other non-schnell models.",
+    }),
+  ),
   n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 4)" })),
 });
 

@@ -19,7 +19,7 @@ export interface ImageOptions {
 
 /** An image generation provider implementation. */
 export interface ImageProvider {
-  /** Provider identifier (e.g. "openai", "fal"). */
+  /** Provider identifier (e.g. "openai", "xai"). */
   name: string;
   /** Environment variable names required. All must be set to enable. */
   envKeys: string[];

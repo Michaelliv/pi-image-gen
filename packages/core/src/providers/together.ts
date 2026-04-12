@@ -26,7 +26,7 @@ export const together: ImageProvider = {
       prompt: options.prompt,
       width,
       height,
-      steps: options.steps ?? 28,
+      steps: options.steps ?? 4,
       n: options.n ?? 1,
       response_format: "base64",
     };
