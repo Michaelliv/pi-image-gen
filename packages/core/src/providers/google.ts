@@ -15,7 +15,6 @@ export const google: ImageProvider = {
       contents: [{ parts: [{ text: options.prompt }] }],
       generationConfig: {
         responseModalities: ["IMAGE", "TEXT"],
-        imageMimeType: "image/png",
       },
     };
 
