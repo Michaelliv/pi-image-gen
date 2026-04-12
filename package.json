@@ -1,7 +1,9 @@
 {
   "name": "pi-image-gen",
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "bun test tests/",
     "test:unit": "bun test tests/format.test.ts tests/resolve.test.ts tests/providers.test.ts",
@@ -12,5 +14,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9"
-  }
+  },
+  "version": "0.0.1"
 }
