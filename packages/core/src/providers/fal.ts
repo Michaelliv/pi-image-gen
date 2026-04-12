@@ -21,17 +21,17 @@ export const fal: ImageProvider = {
       }
     }
 
-    const body: Record<string, unknown> = {
+    const input: Record<string, unknown> = {
       prompt: options.prompt,
       image_size: { width, height },
       num_images: options.n ?? 1,
     };
 
-    // Submit and poll (fal uses queue-based API)
+    // fal.subscribe pattern: POST to queue endpoint, poll for result
     const submitRes = await fetch(`https://queue.fal.run/${model}`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Key ${apiKey}` },
-      body: JSON.stringify(body),
+      body: JSON.stringify(input),
     });
 
     if (!submitRes.ok) throw new Error(`fal API error (${submitRes.status}): ${await submitRes.text()}`);
@@ -41,26 +41,24 @@ export const fal: ImageProvider = {
 
     if (!requestId) {
       // Synchronous response — images already in the response
-      return extractFalImages(submitData);
+      return await extractFalImages(submitData);
     }
 
     // Poll for result
-    const statusUrl = `https://queue.fal.run/${model}/requests/${requestId}/status`;
-    const resultUrl = `https://queue.fal.run/${model}/requests/${requestId}`;
-
     for (let i = 0; i < 60; i++) {
       await new Promise((r) => setTimeout(r, 2000));
-      const statusRes = await fetch(statusUrl, {
+      const statusRes = await fetch(`https://queue.fal.run/${model}/requests/${requestId}/status`, {
         headers: { Authorization: `Key ${apiKey}` },
       });
       if (!statusRes.ok) continue;
       const status = await statusRes.json();
+
       if (status.status === "COMPLETED") {
-        const resultRes = await fetch(resultUrl, {
+        const resultRes = await fetch(`https://queue.fal.run/${model}/requests/${requestId}`, {
           headers: { Authorization: `Key ${apiKey}` },
         });
         if (!resultRes.ok) throw new Error(`fal result error (${resultRes.status}): ${await resultRes.text()}`);
-        return extractFalImages(await resultRes.json());
+        return await extractFalImages(await resultRes.json());
       }
       if (status.status === "FAILED") {
         throw new Error(`fal generation failed: ${JSON.stringify(status)}`);
@@ -70,12 +68,11 @@ export const fal: ImageProvider = {
   },
 };
 
-async function extractFalImages(data: any): Promise<ImageResult[]> {
-  const images = data.images ?? data.output ?? [];
+async function extractFalImages(data: Record<string, unknown>): Promise<ImageResult[]> {
+  const images = (data.images as Array<{ url?: string }>) ?? [];
   const results: ImageResult[] = [];
   for (const img of images) {
     if (img.url) {
-      // Download image and convert to base64
       const imgRes = await fetch(img.url);
       if (!imgRes.ok) continue;
       const buffer = await imgRes.arrayBuffer();

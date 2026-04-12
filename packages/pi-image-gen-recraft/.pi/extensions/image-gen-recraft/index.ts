@@ -6,25 +6,32 @@ import { createRenderers, formatResults, recraft } from "pi-image-gen-core";
 const schema = Type.Object({
   prompt: Type.String({ description: "Detailed description of the image to generate." }),
   size: Type.Optional(
-    Type.Union([Type.Literal("1024x1024"), Type.Literal("1024x1536"), Type.Literal("1536x1024")], {
-      description: "Image dimensions (default: 1024x1024)",
-    }),
+    Type.String({ description: "Image dimensions as WxH (default: 1024x1024). E.g. 1280x1024, 1024x1280" }),
   ),
   style: Type.Optional(
     Type.Union(
       [
-        Type.Literal("realistic_image"),
-        Type.Literal("digital_illustration"),
-        Type.Literal("vector_illustration"),
-        Type.Literal("icon"),
+        Type.Literal("Photorealism"),
+        Type.Literal("Illustration"),
+        Type.Literal("Vector art"),
+        Type.Literal("Hand-drawn"),
+        Type.Literal("Icon"),
+        Type.Literal("Recraft V3 Raw"),
       ],
-      { description: "Image style (default: realistic_image)" },
+      { description: "Image style (default: none, model decides)" },
     ),
   ),
   model: Type.Optional(
-    Type.Union([Type.Literal("recraftv3"), Type.Literal("recraft20b")], {
-      description: "Model version (default: recraftv3)",
-    }),
+    Type.Union(
+      [
+        Type.Literal("recraftv4"),
+        Type.Literal("recraftv4_vector"),
+        Type.Literal("recraftv3"),
+        Type.Literal("recraftv3_vector"),
+        Type.Literal("recraft20b"),
+      ],
+      { description: "Model version (default: recraftv3). V4 models do not support styles." },
+    ),
   ),
   n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 4)" })),
 });
@@ -36,7 +43,7 @@ export default function (pi: ExtensionAPI) {
     name: "image_gen",
     label: "Image Generation",
     description:
-      "Generate images using Recraft. Best for design work: vector graphics, brand-consistent assets, typography, and illustrations.",
+      "Generate images using Recraft. Best for design work: vector graphics, brand-consistent assets, typography, and illustrations. Supports raster and SVG vector output.",
     parameters: schema,
 
     async execute(_toolCallId, params, _signal, _onUpdate, _ctx) {

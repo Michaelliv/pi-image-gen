@@ -5,12 +5,22 @@ import { createRenderers, formatResults, xai } from "pi-image-gen-core";
 
 const schema = Type.Object({
   prompt: Type.String({ description: "Detailed description of the image to generate." }),
-  size: Type.Optional(
-    Type.Union([Type.Literal("1024x1024"), Type.Literal("1024x1536"), Type.Literal("1536x1024")], {
-      description: "Image dimensions (default: 1024x1024)",
-    }),
+  aspectRatio: Type.Optional(
+    Type.Union(
+      [
+        Type.Literal("1:1"),
+        Type.Literal("16:9"),
+        Type.Literal("9:16"),
+        Type.Literal("4:3"),
+        Type.Literal("3:4"),
+        Type.Literal("3:2"),
+        Type.Literal("2:3"),
+        Type.Literal("auto"),
+      ],
+      { description: "Aspect ratio (default: auto). 1:1 square, 16:9 widescreen, 9:16 portrait, etc." },
+    ),
   ),
-  n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 4)" })),
+  n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 10)" })),
 });
 
 const renderers = createRenderers(keyHint, Text);
@@ -26,8 +36,8 @@ export default function (pi: ExtensionAPI) {
     async execute(_toolCallId, params, _signal, _onUpdate, _ctx) {
       const results = await xai.generate({
         prompt: params.prompt,
-        size: params.size,
-        n: Math.min(params.n ?? 1, 4),
+        aspectRatio: params.aspectRatio,
+        n: Math.min(params.n ?? 1, 10),
       });
 
       return {

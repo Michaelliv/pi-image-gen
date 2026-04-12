@@ -92,6 +92,7 @@ describe("xai", () => {
     });
     const results = await xai.generate({ prompt: "landscape" });
     expect(results).toHaveLength(1);
+    expect(results[0].mimeType).toBe("image/jpeg");
     expect(results[0].revisedPrompt).toBe("A landscape");
   });
 });

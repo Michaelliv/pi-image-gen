@@ -12,9 +12,9 @@ export const recraft: ImageProvider = {
       prompt: options.prompt,
       model: options.model ?? "recraftv3",
       n: options.n ?? 1,
-      size: options.size ?? "1024x1024",
-      response_format: "b64_json",
     };
+    if (options.size) body.size = options.size;
+    // Recraft uses style names like "Photorealism", "Illustration", "Vector art"
     if (options.style) body.style = options.style;
     if (options.styleId) body.style_id = options.styleId;
 
@@ -27,9 +27,22 @@ export const recraft: ImageProvider = {
     if (!res.ok) throw new Error(`Recraft API error (${res.status}): ${await res.text()}`);
 
     const data = await res.json();
-    return (data.data ?? []).map((d: { b64_json: string }) => ({
-      base64: d.b64_json,
-      mimeType: "image/png",
-    }));
+    const results: ImageResult[] = [];
+    for (const d of data.data ?? []) {
+      if (d.b64_json) {
+        results.push({ base64: d.b64_json, mimeType: "image/png" });
+      } else if (d.url) {
+        // Recraft returns URLs by default — download and convert to base64
+        const imgRes = await fetch(d.url);
+        if (!imgRes.ok) continue;
+        const buffer = await imgRes.arrayBuffer();
+        const contentType = imgRes.headers.get("content-type") ?? "image/png";
+        results.push({
+          base64: Buffer.from(buffer).toString("base64"),
+          mimeType: contentType.split(";")[0],
+        });
+      }
+    }
+    return results;
   },
 };
