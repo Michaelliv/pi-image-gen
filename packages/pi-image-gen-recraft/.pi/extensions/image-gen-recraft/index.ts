@@ -25,15 +25,16 @@ const schema = Type.Object({
     Type.Union(
       [
         Type.Literal("recraftv4"),
+        Type.Literal("recraftv4_pro"),
         Type.Literal("recraftv4_vector"),
+        Type.Literal("recraftv4_pro_vector"),
         Type.Literal("recraftv3"),
         Type.Literal("recraftv3_vector"),
-        Type.Literal("recraft20b"),
       ],
       { description: "Model version (default: recraftv3). V4 models do not support styles." },
     ),
   ),
-  n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 4)" })),
+  n: Type.Optional(Type.Number({ description: "Number of images to generate (default 1, max 6)" })),
 });
 
 const renderers = createRenderers(keyHint, Text);

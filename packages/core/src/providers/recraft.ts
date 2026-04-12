@@ -11,10 +11,12 @@ export const recraft: ImageProvider = {
     const body: Record<string, unknown> = {
       prompt: options.prompt,
       model: options.model ?? "recraftv3",
+      response_format: "b64_json",
       n: options.n ?? 1,
     };
     if (options.size) body.size = options.size;
-    // Recraft uses style names like "Photorealism", "Illustration", "Vector art"
+    // Recraft uses style names like "Photorealism", "Illustration", "Vector art", "Hand-drawn"
+    // Styles are only supported on V2/V3 models, not V4
     if (options.style) body.style = options.style;
     if (options.styleId) body.style_id = options.styleId;
 
@@ -27,22 +29,9 @@ export const recraft: ImageProvider = {
     if (!res.ok) throw new Error(`Recraft API error (${res.status}): ${await res.text()}`);
 
     const data = await res.json();
-    const results: ImageResult[] = [];
-    for (const d of data.data ?? []) {
-      if (d.b64_json) {
-        results.push({ base64: d.b64_json, mimeType: "image/png" });
-      } else if (d.url) {
-        // Recraft returns URLs by default — download and convert to base64
-        const imgRes = await fetch(d.url);
-        if (!imgRes.ok) continue;
-        const buffer = await imgRes.arrayBuffer();
-        const contentType = imgRes.headers.get("content-type") ?? "image/png";
-        results.push({
-          base64: Buffer.from(buffer).toString("base64"),
-          mimeType: contentType.split(";")[0],
-        });
-      }
-    }
-    return results;
+    return (data.data ?? []).map((d: { b64_json: string }) => ({
+      base64: d.b64_json,
+      mimeType: "image/png",
+    }));
   },
 };

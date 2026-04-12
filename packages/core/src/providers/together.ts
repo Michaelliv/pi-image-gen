@@ -8,7 +8,7 @@ export const together: ImageProvider = {
     const apiKey = process.env.TOGETHER_API_KEY;
     if (!apiKey) throw new Error("TOGETHER_API_KEY not set");
 
-    const model = options.model ?? "black-forest-labs/FLUX.1-dev";
+    const model = options.model ?? "black-forest-labs/FLUX.1-schnell";
 
     // Parse size
     let width = 1024;
@@ -28,7 +28,7 @@ export const together: ImageProvider = {
       height,
       steps: options.steps ?? 28,
       n: options.n ?? 1,
-      response_format: "b64_json",
+      response_format: "base64",
     };
 
     const res = await fetch("https://api.together.xyz/v1/images/generations", {
