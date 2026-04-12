@@ -1,6 +1,6 @@
 {
   "name": "pi-image-gen-router",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pi image generation tool that auto-detects available API keys",
   "keywords": [
     "pi-package"

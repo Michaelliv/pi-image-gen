@@ -1,6 +1,6 @@
 {
   "name": "pi-image-gen-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shared types and provider implementations for pi-image-gen",
   "main": "src/index.ts",
   "types": "src/index.ts",
