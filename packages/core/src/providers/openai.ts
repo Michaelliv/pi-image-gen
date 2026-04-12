@@ -14,8 +14,13 @@ export const openai: ImageProvider = {
       prompt: options.prompt,
       n: options.n ?? 1,
       size: options.size ?? "1024x1024",
-      response_format: "b64_json",
     };
+    // gpt-image-1 uses output_format, dall-e uses response_format
+    if (model.startsWith("dall-e")) {
+      body.response_format = "b64_json";
+    } else {
+      body.output_format = "png";
+    }
     if (options.quality) body.quality = options.quality;
     if (options.style) body.style = options.style;
 
