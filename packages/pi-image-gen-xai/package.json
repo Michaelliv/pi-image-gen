@@ -1,6 +1,6 @@
 {
   "name": "pi-image-gen-xai",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pi image generation tool powered by xAI (Grok Imagine / Aurora)",
   "keywords": [
     "pi-package"

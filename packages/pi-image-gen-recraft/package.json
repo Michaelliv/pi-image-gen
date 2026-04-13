@@ -1,6 +1,6 @@
 {
   "name": "pi-image-gen-recraft",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pi image generation tool powered by Recraft (V3, V4)",
   "keywords": [
     "pi-package"
