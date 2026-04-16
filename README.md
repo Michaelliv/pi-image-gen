@@ -1,6 +1,6 @@
 # pi-image-gen
 
-Image generation tools for [pi](https://github.com/badlogic/pi). 6 providers, pick what you need.
+Image generation tools for [pi](https://github.com/badlogic/pi-mono). 6 providers, pick what you need.
 
 ## Quick start - Router (recommended)
 
